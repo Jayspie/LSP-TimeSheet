@@ -19,6 +19,9 @@ CREATE TABLE Locations(
 --@BLOCK
 ALTER TABLE Employees
 RENAME COLUMN roles to admin;
+--@BLOCK
+ALTER TABLE Locations
+ADD COLUMN id SERIAL;
 
 --@BLOCK
 SELECT* FROM employees ORDER BY id ASC;

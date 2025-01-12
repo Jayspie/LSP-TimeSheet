@@ -1,3 +1,5 @@
 .vscode
 db.js
 api.rest
+.env
+test.js
