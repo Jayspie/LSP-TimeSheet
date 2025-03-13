@@ -1,9 +1,18 @@
 import express from "express";
 import sql from "./db.js";
 import "dotenv/config";
-
+import path from "path";
+import { fileURLToPath } from "url";
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "view")));
+app.get("/", async (req, res) => {
+  // Displays the homepage at "/"
+  res.sendFile(path.join(__dirname, "view", "clock.html"));
+});
 
 //ADMIN FOR EMPLOYEE LISTING
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="center"></div>
+    <header><img src="LSP-removebg-preview.png" alt="LSP LOGO"></header>
+    <div class="clock">
+        <span id="hrs">00</span>
+        <span>:</span>
+        <span id="min">00</span>
+        <span>:</span>
+        <span id="sec">00</span>
+    </div>
+    <input id="clockTextarea" placeholder="Enter ID Number:"></input>
+    <div>
+        <button type="button" onclick="Post()" class="functions" id="top_fun">Clock-In</button>
+        <button type="button" class="functions">Clock-Out</button>
+        <button type="button" class="functions">TimeSheet</button>
+    </div>
+    <script>
+        let hrs = document.getElementById("hrs")
+        let min = document.getElementById("min")
+        let sec = document.getElementById("sec")
+
+        function updateClock() {
+            let curtime = new Date();
+
+            hrs.innerHTML = (curtime.getHours() < 10 ? "0" : "") + curtime.getHours();
+            min.innerHTML = (curtime.getMinutes() < 10 ? "0" : "") + curtime.getMinutes();
+            sec.innerHTML = (curtime.getSeconds() < 10 ? "0" : "") + curtime.getSeconds();
+        }
+
+        // Update clock immediately when the page loads
+        updateClock();
+
+        // Update clock every second
+        setInterval(updateClock, 1000);
+
+
+
+
+        function Post() {
+            fetch('http://localhost:80/clock_in:1769', {
+                method: 'POST',
+                body: JSON.stringify({
+                    location_name: "Central Park"
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>
