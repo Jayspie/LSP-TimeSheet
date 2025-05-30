@@ -37,12 +37,12 @@ loc.post("/:admin_id", async (req, res) => {
         return response.json();
       })
       .then(async (jsonData) => {
-        let latog = jsonData.results[0].geometry.location.lat; //east to west
+        let latog = jsonData.results[0].geometry.location.lat; //west to east
         let lngog = jsonData.results[0].geometry.location.lng; //north to south
-        let lat1 = latog + 0.001;
-        let lng1 = lngog + 0.001;
-        let lat2 = latog - 0.001;
-        let lng2 = lngog - 0.001;
+        let lat1 = latog + 0.004421; //west
+        let lng1 = lngog + 0.00378; //north
+        let lat2 = latog - 0.00442; //east
+        let lng2 = lngog - 0.00378; //south
 
         const result = await sql`
                       INSERT INTO Locations (location_name, location_address, lat_1, long_1, lat_2, long_2)

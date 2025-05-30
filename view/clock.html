@@ -19,10 +19,13 @@
         <span id="sec">00</span>
     </div>
     <input id="clockTextarea" placeholder="Enter ID Number:"></input>
+    <p id="response"></p>
     <div>
-        <button type="button" onclick="Post()" class="functions" id="top_fun">Clock-In</button>
+        <button type="button" onclick="Clock_In()" class="functions" id="top_fun">Clock-In</button>
         <button type="button" class="functions">Clock-Out</button>
-        <button type="button" class="functions">TimeSheet</button>
+        <button type="button" onclick="TimeSheet()" class="functions">TimeSheet</button>
+    </div>
+    <div id="time">
     </div>
     <script>
         let hrs = document.getElementById("hrs")
@@ -45,18 +48,125 @@
 
 
 
+        function Clock_In() {
+            var input = document.getElementById("clockTextarea")
+            // Check if geolocation is available in the browser
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    // The user's latitude and longitude are in position.coords.latitude and position.coords.longitude
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
 
-        function Post() {
-            fetch('http://localhost:80/clock_in:1769', {
-                method: 'POST',
-                body: JSON.stringify({
-                    location_name: "Central Park"
-                }),
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
+                    fetch(`http://localhost:80/clock-in/:${input.value}`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            lat: latitude,
+                            lng: longitude,
+                        }),
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8',
+                        }
+                    }).then(async (response) => {
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                            document.getElementById("response").innerHTML = data.error || "An error occurred";
+                        } else {
+                            document.getElementById("response").innerHTML = "Clock-in successful!"
+                        }
+                    })
+                        .catch(error => {
+                            console.error("Clock-In Error:", error);
+                            document.getElementById("response").innerHTML = error;
+                        });
+                })
+            }
+
+        }
+
+        function TimeSheet() {
+            var input = document.getElementById("clockTextarea")
+            fetch(`http://localhost:80/timesheet/:${input.value}`, {
+                method: 'GET'
+            }).then(async (response) => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    document.getElementById("response").innerHTML = data.error || "An error occurred";
+                } else {
+                    if (data.length < 1) {
+                        document.getElementById("response").innerHTML = "No Time Here";
+                    }
+                    else {
+                        document.getElementById("time").innerHTML = `
+<style>
+
+        #excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        #excel-table th,
+        #excel-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px 15px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        #excel-table th {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            font-weight: bold;
+        }
+
+        #excel-table tr:nth-child(even) {
+            background-color: #f1f3f5;
+        }
+    </style>
+
+    <h2>${JSON.stringify(data[0].first_name).replaceAll('"', "")} ${JSON.stringify(data[0].last_name).replaceAll('"', "")} Timesheet</h2>
+    <table id='excel-table'>
+            <tr>
+                <th>employee_id</th>
+                <th>last_name</th>
+                <th>first_name</th>
+                <th>location_name</th>
+                <th>clock_in</th>
+                <th>clock_out</th>
+                <th>total_hours</th>
+            </tr>
+    </table>`/*JSON.stringify(data)*/
+                        const table = document.getElementById("excel-table")
+                        for (i = 0; i < data.length; i++) {
+                            let id = JSON.stringify(data[i].employees_id).replaceAll('"', '');
+                            let last_name = JSON.stringify(data[i].last_name).replaceAll('"', '');
+                            let first_name = JSON.stringify(data[i].first_name).replaceAll('"', '');
+                            let location_name = JSON.stringify(data[i].location_name).replaceAll('"', '');
+                            let clock_in = JSON.stringify(data[i].clock_in).replaceAll('"', '');
+                            let clock_out = JSON.stringify(data[i].clock_out).replaceAll('"', '');
+                            let total_hours = JSON.stringify(data[i].total_hours).replaceAll('"', '');
+                            table.innerHTML += `
+        <tr>
+                <td>${id}</td>
+                <td>${last_name}</td>
+                <td>${first_name}</td>
+                <td>${location_name}</td>
+                <td>${clock_in}</td>
+                <td>${clock_out}</td>
+                <td>${total_hours}</td>
+        </tr>`}
+                    }
                 }
             })
+                .catch(error => {
+                    console.error("Clock-In Error:", error);
+                    document.getElementById("response").innerHTML = error;
+                });
         }
+
     </script>
 </body>
 

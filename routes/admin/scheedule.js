@@ -35,7 +35,9 @@ schedule.post("/:admin_id", async (req, res) => {
       const loc_add =
         await sql`SELECT * FROM locations WHERE location_name = ${location_name}`;
 
-      console.log(work_date, id, location_name, start_time, end_time);
+      console.log(
+        `${work_date}, ${emp_name[0].last_name}, ${emp_name[0].first_name}, ${location_name},${loc_add[0].location_address}, ${start_time}, ${end_time}`
+      );
       const result = await sql`insert into schedule (
               work_date ,
               last_name ,
@@ -73,11 +75,12 @@ schedule.put("/:admin_id", async (req, res) => {
 
     try {
       // Fetch the current values for the given employee.
+      console.log(req.body);
       const [schedule] = await sql`
               SELECT work_date ,last_name ,first_name ,location_name ,location_address ,start_time ,end_time
               FROM schedule 
               WHERE id = ${id}`;
-      console.log(schedule);
+      console.log(schedule.last_name);
 
       if (!schedule) {
         return res.status(404).json({ error: "Schedule Not Found" });
@@ -125,7 +128,7 @@ schedule.put("/:admin_id", async (req, res) => {
         );
       }
 
-      if (location_address !== schedule.last_nalocation_addressme) {
+      if (location_address !== schedule.location_address) {
         updates.push(
           await sql`
               UPDATE schedule 

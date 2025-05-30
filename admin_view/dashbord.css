@@ -1,0 +1,89 @@
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f9fa;
+}
+
+#nav {
+  list-style: none;
+  margin-bottom: 5%;
+}
+li {
+  width: 10%;
+  display: inline-block;
+  vertical-align: top;
+}
+#logo {
+  margin-right: 20%;
+}
+#logo img {
+  width: 80%;
+}
+.routes {
+  margin-right: 5%;
+}
+#contaer {
+  position: relative;
+}
+#excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+#excel-table th,
+#excel-table td {
+  border: 1px solid #dee2e6;
+  padding: 10px 15px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#excel-table th {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  font-weight: bold;
+}
+
+#excel-table tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+button {
+  font-family: "ariel";
+  background-color: transparent;
+  border: none;
+  font-size: 200%;
+  font-weight: bold;
+}
+#edit {
+  background-color: #f2f0ef;
+  border-radius: 15%;
+  display: none;
+  width: 25%;
+  height: 50%;
+  position: absolute;
+  top: 10%;
+  left: 25%;
+  z-index: 10;
+}
+
+#employee_id {
+  margin-left: 30%;
+  margin-bottom: 15%;
+}
+
+#edit h3 {
+  margin-top: -20%;
+  position: absolute;
+  margin-left: 84%;
+}
+
+.name {
+  width: 50%;
+  height: 10%;
+  margin-left: 20%;
+  margin-bottom: 10%;
+  border: none;
+  border-radius: 28%;
+}

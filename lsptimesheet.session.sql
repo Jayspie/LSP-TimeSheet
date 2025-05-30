@@ -40,6 +40,12 @@ CREATE TABLE TIMESHEET(
     total_hours smallint
 );
 
+--@BLOCK
+CREATE TABLE ADMIN_LOG(
+    admin_id smallint NOT NULL,
+    login BYTEA NOT NULL
+);
+
 
 /*Alter table Section */
 --@BLOCK
@@ -51,7 +57,12 @@ ALTER TABLE TIMESHEET
 
 --@BLOCK
 ALTER TABLE Locations
-    ADD COLUMN id SERIAL;
+    ADD COLUMN id serial;
+
+--@BLOCK
+ALTER TABLE SCHEDULE
+    ALTER COLUMN end_time TYPE timestamptz
+    USING (work_date + end_time)::timestamptz;
 
 
 /* basic Select table Section */
@@ -76,8 +87,8 @@ SELECT
     *
 FROM
     schedule
-ORDER BY
-    id ASC;
+WHERE
+    last_name = 'Swift';
 
 --@BLOCK
 SELECT
@@ -101,10 +112,9 @@ SELECT
 FROM
     TIMESHEET
 WHERE
-    employees_id = 2
+    clock_out IS NULL
 ORDER BY
-    clock_in DESC
-LIMIT 1;
+    clock_in DESC;
 
 --@BLOCK
 SELECT
@@ -116,11 +126,20 @@ WHERE
 
 --@BLOCK
 SELECT
-    work_date
+    *
+FROM
+    SCHEDULE;
+
+--@BLOCK
+SELECT
+    work_date,
+    start_time,
+    end_time
 FROM
     SCHEDULE
 WHERE
-    id = 4940;
+    last_name = 'MayWester'
+    AND first_name = 'Nigel';
 
 --@BLOCK
 SELECT
@@ -129,6 +148,16 @@ FROM
     locations
 WHERE
     location_name = 'Central Park';
+
+--@Block
+SELECT
+    *
+FROM
+    TIMESHEET
+WHERE
+    employees_id = 6379
+ORDER BY
+    clock_in DESC;
 
 
 /*Update table Section*/
@@ -165,8 +194,7 @@ DELETE FROM Employees
 WHERE id = 6483;
 
 --@BLOCK
-DELETE FROM TIMESHEET
-WHERE employees_ID = 2;
+DELETE FROM SCHEDULE;
 
 
 /*Insert table sections*/
@@ -194,5 +222,21 @@ INSERT INTO TIMESHEET(employees_ID, last_name, first_name, location_name, clock_
 
 --@BLOCK
 INSERT INTO TIMESHEET(employees_ID, last_name, first_name, location_name, clock_in)
-    VALUES (1, 'jay', 'hines', 'Eiffel Tower', '2025-03-09T05:16:09.340Z');
+    VALUES (6379, 'MayWester', 'Nigel', 'test', '2025-05-23T08:58:44.551Z');
+
+--@block
+SELECT
+    column_name,
+    data_type
+FROM
+    information_schema.columns
+WHERE
+    table_name = 'schedule';
+
+--@block
+ALTER TABLE schedule
+    ALTER COLUMN start_time TYPE time
+    USING start_time::time,
+    ALTER COLUMN end_time TYPE time
+    USING end_time::time;
 

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Timesheet</title>
+    <link rel="stylesheet" href="/admin_view/dashbord.css">
+
+</head>
+
+<body>
+    <ul id="nav">
+        <li id="logo"><img src="LSP-removebg-preview.png" alt="LSP Logo"></li>
+        <li class="routes">
+            <h1>Employees</h1>
+        </li>
+        <li class="routes">
+            <h1>Schedule</h1>
+        </li>
+        <li class="routes">
+            <h1>Location</h1>
+        </li>
+        <li class="routes">
+            <h1>TimeSheet</h1>
+        </li>
+    </ul>
+    <div id="contaer">
+        <h2>Employees</h2>
+        <table id="excel-table">
+            <tr>
+                <th>employee_id</th>
+                <th>last_name</th>
+                <th>first_name</th>
+                <th>Admin</th>
+                <th>Edits</th>
+            </tr>
+        </table>
+        <p id="response"></p>
+        <div id="edit">
+            <h2 id="employee_id"></h2>
+            <h3 onclick="close_edit()">X</h3>
+            <input id="last_name" class="name" type="text">
+            <input id="first_name" class="name" type="text">
+            <select name="admin" id="admin">
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+        </div>
+    </div>
+    <script>
+
+
+        fetch(`http://localhost:80/admin/employees/:1`, {
+            method: 'GET'
+        }).then(async (response) => {
+            const data = await response.json();
+
+            if (!response.ok) {
+                document.getElementById("response").innerHTML = data.error || "An error occurred";
+            } else {
+                const table = document.getElementById("excel-table")
+                for (i = 0; i < data.length; i++) {
+                    let id = JSON.stringify(data[i].id).replaceAll('"', '');
+                    let last_name = JSON.stringify(data[i].last_name).replaceAll('"', '');
+                    let first_name = JSON.stringify(data[i].first_name).replaceAll('"', '');
+                    let admin = JSON.stringify(data[i].admin).replaceAll('"', '');
+                    table.innerHTML += `
+                    <tr>
+                        <td>${id}</td>
+                        <td>${last_name}</td>
+                        <td>${first_name}</td>
+                        <td>${admin}</td>
+                        <td><button onclick="populateEdit('${id}', '${last_name}', '${first_name}', '${admin}')">...</button></td>
+                     </tr>`}
+
+
+                //document.getElementById("response").innerHTML = JSON.stringify(data)
+            }
+        })
+            .catch(error => {
+                console.error("Clock-In Error:", error);
+                document.getElementById("response").innerHTML = error;
+            });
+        function populateEdit(id, last_name, first_name, admin) {
+            document.getElementById("edit").style.display = "block";
+            document.getElementById("employee_id").innerText = `Employee ${id}`;
+            document.getElementById("last_name").value = last_name;
+            document.getElementById("first_name").value = first_name;
+            document.getElementById("admin").value = admin;
+        }
+        function close_edit() {
+            document.getElementById("edit").style.display = "none";
+        }
+
+
+    </script>
+</body>
+
+</html>
