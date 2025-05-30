@@ -1,6 +1,7 @@
 import express from "express";
-const clock_in = express.Router();
 import sql from "../../other/db.js";
+
+const clock_in = express.Router();
 clock_in.use(express.json());
 
 const between = (x, min, max) => {
