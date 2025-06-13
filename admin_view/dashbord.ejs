@@ -5,13 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Employee Timesheet</title>
-    <link rel="stylesheet" href="/admin_view/dashbord.css">
+    <link rel="stylesheet" href="/Admin_view/dashbord.css">
 
 </head>
 
 <body>
     <ul id="nav">
-        <li id="logo"><img src="LSP-removebg-preview.png" alt="LSP Logo"></li>
+        <li id="logo"><img src="/Admin_view/LSP-removebg-preview.png" alt="LSP Logo"></li>
         <li class="routes">
             <h1>Employees</h1>
         </li>
@@ -40,18 +40,26 @@
         <div id="edit">
             <h2 id="employee_id"></h2>
             <h3 onclick="close_edit()">X</h3>
-            <input id="last_name" class="name" type="text">
-            <input id="first_name" class="name" type="text">
-            <select name="admin" id="admin">
-                <option value="True">True</option>
-                <option value="False">False</option>
-            </select>
+            <form action="/admin/employees/:1?_method=PUT" method="POST">
+                <input type="hidden" id="id" name="id" />
+                <input id="last_name" class="name" name="last_name" type="text">
+                <input id="first_name" class="name" name="first_name" type="text">
+                <select name="admin" id="admin">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+                <button type="submit" class="form_button">Edit</button>
+            </form>
+            <form action="/admin/employees/:1?_method=DELETE" method="POST">
+                <input type="hidden" id="del_id" name="id" />
+                <button type="submit" class="form_button" id="iddel">Delete</button>
+            </form>
         </div>
     </div>
     <script>
 
-
-        fetch(`http://localhost:80/admin/employees/:1`, {
+        var id = <%=admin_id %>;
+        fetch(`http://localhost:8080/admin/employees/:${id}`, {
             method: 'GET'
         }).then(async (response) => {
             const data = await response.json();
@@ -85,6 +93,8 @@
         function populateEdit(id, last_name, first_name, admin) {
             document.getElementById("edit").style.display = "block";
             document.getElementById("employee_id").innerText = `Employee ${id}`;
+            document.getElementById("id").value = id;
+            document.getElementById("del_id").value = id;
             document.getElementById("last_name").value = last_name;
             document.getElementById("first_name").value = first_name;
             document.getElementById("admin").value = admin;

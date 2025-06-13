@@ -14,6 +14,7 @@ employ.get("/:admin_id", async (req, res) => {
               from employees
               ORDER BY id ASC
           `;
+      console.log(employees.find((employee) => employee.id === 1));
       res.status(200).json(employees);
     } catch (error) {
       console.error("[server] Error fetching employees:", error);
@@ -52,14 +53,20 @@ employ.put("/:admin_id", async (req, res) => {
     req.params.admin_id.replace(":", "")
   )}`;
   if (admin[0]?.admin == true) {
-    const { id, last_name, first_name, employeesadmin } = req.body;
+    const { id, last_name, first_name, admin } = req.body;
+    var isTrueSet = admin === "true";
+    var tonumber = Number(id);
+    console.log(tonumber);
+    console.log(last_name);
+    console.log(first_name);
+    console.log(isTrueSet);
 
     try {
       // Fetch the current values for the given employee.
       const [employee] = await sql`
               SELECT last_name, first_name, admin 
               FROM employees 
-              WHERE id = ${id}`;
+              WHERE id = ${tonumber}`;
 
       if (!employee) {
         return res.status(404).json({ error: "Employee not found" });
@@ -69,31 +76,34 @@ employ.put("/:admin_id", async (req, res) => {
       const updates = [];
 
       if (last_name !== employee.last_name) {
+        console.log(1);
         updates.push(
           await sql`
               UPDATE Employees 
               SET last_name = ${last_name} 
-              WHERE id = ${id}
+              WHERE id = ${tonumber}
           `
         );
       }
 
       if (first_name !== employee.first_name) {
+        console.log(2);
         updates.push(
           await sql`
               UPDATE Employees 
               SET first_name = ${first_name} 
-              WHERE id = ${id}
+              WHERE id = ${tonumber}
           `
         );
       }
 
-      if (employeesadmin !== employee.admin) {
+      if (isTrueSet !== employee.admin) {
+        console.log(3);
         updates.push(
           await sql`
               UPDATE Employees 
-              SET admin = ${employeesadmin} 
-              WHERE id = ${id}
+              SET admin = ${isTrueSet} 
+              WHERE id = ${tonumber}
           `
         );
       }

@@ -61,20 +61,20 @@ button {
   border-radius: 15%;
   display: none;
   width: 25%;
-  height: 50%;
+  height: 55%;
   position: absolute;
   top: 10%;
-  left: 25%;
+  left: 37%;
   z-index: 10;
 }
 
 #employee_id {
-  margin-left: 30%;
+  margin-left: 20%;
   margin-bottom: 15%;
 }
 
 #edit h3 {
-  margin-top: -20%;
+  margin-top: -23%;
   position: absolute;
   margin-left: 84%;
 }
@@ -86,4 +86,17 @@ button {
   margin-bottom: 10%;
   border: none;
   border-radius: 28%;
+}
+
+#edit form select {
+  margin-left: 20%;
+  margin-right: 60%;
+  margin-bottom: 5%;
+}
+
+.form_button {
+  font-family: "Roboto", sans-serif;
+  font-size: 150%;
+  margin-left: 17%;
+  margin-bottom: 5%;
 }

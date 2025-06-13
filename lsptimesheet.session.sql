@@ -41,9 +41,10 @@ CREATE TABLE TIMESHEET(
 );
 
 --@BLOCK
-CREATE TABLE ADMIN_LOG(
-    admin_id smallint NOT NULL,
-    login BYTEA NOT NULL
+CREATE TABLE ADMIN(
+    admin_id smallint NOT NULL PRIMARY KEY,
+    admin_name varchar(255) NOT NULL,
+    password varchar(255) NOT NULL
 );
 
 
@@ -94,7 +95,7 @@ WHERE
 SELECT
     *
 FROM
-    TIMESHEET;
+    ADMIN;
 
 
 /*Selection with where table Section */
@@ -165,10 +166,9 @@ ORDER BY
 UPDATE
     Employees
 SET
-    Last_name = 'paker',
-    first_name = 'peter'
+    admin = 'true'
 WHERE
-    id = 3671;
+    id = 1;
 
 --@BLOCK
 UPDATE
@@ -190,11 +190,11 @@ WHERE
 
 /*Delete table Section*/
 --@BLOCK
-DELETE FROM Employees
-WHERE id = 6483;
+DELETE FROM ADMIN
+WHERE admin_id = 1;
 
 --@BLOCK
-DELETE FROM SCHEDULE;
+DROP TABLE ADMIN;
 
 
 /*Insert table sections*/

@@ -2,7 +2,22 @@ import express from "express";
 const clock_out = express.Router();
 import sql from "../../other/db.js";
 clock_out.use(express.json());
-
+/*works for right now 
+but later on it needs to be changed
+maybe change the schedule to 
+work date start time and work date end time
+For example:
+{
+    "id": 10,
+    "work_date": "2025-01-12T06:00:00.000Z",
+    "last_name": "doe",
+    "first_name": "john",
+    "location_name": "wall mart park",
+    "location_address": "New York, NY,USA",
+    "start_time": "2025-01-12T14:30:00.000Z",(in CST)
+    "end_time": "2025-01-13T14:30:00.000Z"(in CST)
+  },
+*/
 clock_out.put("/:id", async (req, res) => {
   const clock_out = new Date();
   console.log(clock_out);

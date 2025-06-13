@@ -22,7 +22,7 @@
     <p id="response"></p>
     <div>
         <button type="button" onclick="Clock_In()" class="functions" id="top_fun">Clock-In</button>
-        <button type="button" class="functions">Clock-Out</button>
+        <button type="button" class="functions" onclick="Clock_Out()">Clock-Out</button>
         <button type="button" onclick="TimeSheet()" class="functions">TimeSheet</button>
     </div>
     <div id="time">
@@ -57,7 +57,7 @@
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
 
-                    fetch(`http://localhost:80/clock-in/:${input.value}`, {
+                    fetch(`http://localhost:8080/clock-in/:${input.value}`, {
                         method: 'POST',
                         body: JSON.stringify({
                             lat: latitude,
@@ -84,9 +84,36 @@
 
         }
 
+        function Clock_Out() {
+            var input = document.getElementById("clockTextarea")
+
+
+            fetch(`http://localhost:8080/clock-out/:${input.value}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                }
+            }).then(async (response) => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                    document.getElementById("response").innerHTML = data.error || "An error occurred";
+                } else {
+                    document.getElementById("response").innerHTML = "Clock-Out successful!"
+                }
+            })
+                .catch(error => {
+                    console.error("Clock-In Error:", error);
+                    document.getElementById("response").innerHTML = error;
+                });
+        }
+
+
+
+
         function TimeSheet() {
             var input = document.getElementById("clockTextarea")
-            fetch(`http://localhost:80/timesheet/:${input.value}`, {
+            fetch(`http://localhost:8080/timesheet/:${input.value}`, {
                 method: 'GET'
             }).then(async (response) => {
                 const data = await response.json();

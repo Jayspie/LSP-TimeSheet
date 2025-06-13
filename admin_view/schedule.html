@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Scheduler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #d1e7dd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Schedule an Appointment</h2>
+    <div class="form-container">
+        <div class="form-group">
+            <label for="employee">Employee</label>
+            <input type="text" id="employee" placeholder="e.g., John Smith" />
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="e.g., Office 101" />
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" />
+        </div>
+        <div class="form-group">
+            <label for="start">Start Time</label>
+            <input type="time" id="start" />
+        </div>
+        <div class="form-group">
+            <label for="end">End Time</label>
+            <input type="time" id="end" />
+        </div>
+        <button onclick="addAppointment()">Add Appointment</button>
+    </div>
+
+    <h2>Appointments</h2>
+    <table id="appointmentsTable">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Appointments go here -->
+        </tbody>
+    </table>
+
+    <script>
+        function addAppointment() {
+            const employee = document.getElementById("employee").value;
+            const location = document.getElementById("location").value;
+            const date = document.getElementById("date").value;
+            const start = document.getElementById("start").value;
+            const end = document.getElementById("end").value;
+
+            if (!employee || !location || !date || !start || !end) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const table = document.getElementById("appointmentsTable").getElementsByTagName("tbody")[0];
+            const row = table.insertRow();
+            row.insertCell(0).innerText = employee;
+            row.insertCell(1).innerText = location;
+            row.insertCell(2).innerText = date;
+            row.insertCell(3).innerText = start;
+            row.insertCell(4).innerText = end;
+
+            // Clear form
+            document.getElementById("employee").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("start").value = "";
+            document.getElementById("end").value = "";
+        }
+    </script>
+
+</body>
+
+</html>

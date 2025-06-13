@@ -19,8 +19,20 @@ A simple and functional timesheet tracking application built with Node.js and Ex
 
 ## 📝 To Do
 
-- Add authentication for admin routes
+&#x2611; Create login/out and registeriton for admin
 
-- Improve UI with modern styles
+&#x2611; Create frontend for clock-in
 
-- Connect to a real database (currently implied or local)
+&#x2611; Create frontend for clock-out
+
+&#x2611; Create frontend for Employee Timesheet
+
+&#x2610; Create admin Dashboard
+
+&nbsp;&nbsp;&nbsp;&nbsp; &#x2611; Employee list
+
+&nbsp;&nbsp;&nbsp;&nbsp; &#x2610; Schedule
+
+&nbsp;&nbsp;&nbsp;&nbsp; &#x2610; Location
+
+&nbsp;&nbsp;&nbsp;&nbsp; &#x2610; TimeSheet
