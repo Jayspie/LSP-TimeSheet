@@ -16,7 +16,7 @@
             <h1>Employees</h1>
         </li>
         <li class="routes">
-            <h1>Schedule</h1>
+            <h1><a href="/admin/schedule">Schedule</a></h1>
         </li>
         <li class="routes">
             <h1>Location</h1>
@@ -63,7 +63,6 @@
             method: 'GET'
         }).then(async (response) => {
             const data = await response.json();
-
             if (!response.ok) {
                 document.getElementById("response").innerHTML = data.error || "An error occurred";
             } else {

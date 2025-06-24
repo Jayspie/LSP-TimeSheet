@@ -88,7 +88,14 @@ app.get("/admin/page", checkAuthenticated, async (req, res) => {
   });
 });
 app.get("/admin/schedule", async (req, res) => {
-  res.sendFile(path.join(__dirname, "Admin_view", "schedule.html"));
+  if (!req.session.isLoggedIn) {
+    return res.redirect("/admin/login");
+  }
+
+  res.render("schedule.ejs", {
+    admin_id: req.session.admin_id,
+  });
+  //res.sendFile(path.join(__dirname, "Admin_view", "schedule.html"));
 });
 
 //Login

@@ -14,7 +14,6 @@ employ.get("/:admin_id", async (req, res) => {
               from employees
               ORDER BY id ASC
           `;
-      console.log(employees.find((employee) => employee.id === 1));
       res.status(200).json(employees);
     } catch (error) {
       console.error("[server] Error fetching employees:", error);
