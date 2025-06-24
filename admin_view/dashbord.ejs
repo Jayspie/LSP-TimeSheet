@@ -16,7 +16,7 @@
             <h1>Employees</h1>
         </li>
         <li class="routes">
-            <h1>Schedule</h1>
+            <h1><a href="/admin/schedule">Schedule</a></h1>
         </li>
         <li class="routes">
             <h1>Location</h1>
@@ -25,45 +25,39 @@
             <h1>TimeSheet</h1>
         </li>
     </ul>
+
+    <div id="form-container"></div>
+    </div>
+
+    <div id="toptable_edit">
+    </div>
+
+    <ul id="toptable">
+        <li>
+            <h2>Employees</h2>
+        </li>
+        <li><button id="schdule" onclick="show_schedule()">Add Employee</button></li>
+    </ul>
+
     <div id="contaer">
-        <h2>Employees</h2>
         <table id="excel-table">
             <tr>
-                <th>employee_id</th>
-                <th>last_name</th>
-                <th>first_name</th>
+                <th>Employee ID</th>
+                <th>Last Name</th>
+                <th>First Name</th>
                 <th>Admin</th>
                 <th>Edits</th>
             </tr>
         </table>
         <p id="response"></p>
-        <div id="edit">
-            <h2 id="employee_id"></h2>
-            <h3 onclick="close_edit()">X</h3>
-            <form action="/admin/employees/:1?_method=PUT" method="POST">
-                <input type="hidden" id="id" name="id" />
-                <input id="last_name" class="name" name="last_name" type="text">
-                <input id="first_name" class="name" name="first_name" type="text">
-                <select name="admin" id="admin">
-                    <option value="true">True</option>
-                    <option value="false">False</option>
-                </select>
-                <button type="submit" class="form_button">Edit</button>
-            </form>
-            <form action="/admin/employees/:1?_method=DELETE" method="POST">
-                <input type="hidden" id="del_id" name="id" />
-                <button type="submit" class="form_button" id="iddel">Delete</button>
-            </form>
-        </div>
     </div>
     <script>
 
         var id = <%=admin_id %>;
-        fetch(`http://localhost:8080/admin/employees/:${id}`, {
+        fetch(`/admin/employees/:${id}`, {
             method: 'GET'
         }).then(async (response) => {
             const data = await response.json();
-
             if (!response.ok) {
                 document.getElementById("response").innerHTML = data.error || "An error occurred";
             } else {
@@ -79,7 +73,7 @@
                         <td>${last_name}</td>
                         <td>${first_name}</td>
                         <td>${admin}</td>
-                        <td><button onclick="populateEdit('${id}', '${last_name}', '${first_name}', '${admin}')">...</button></td>
+                        <td><a href="#toptable_edit"><button onclick="populateEdit('${id}', '${last_name}', '${first_name}', '${admin}')">...</button></a></td>
                      </tr>`}
 
 
@@ -90,17 +84,161 @@
                 console.error("Clock-In Error:", error);
                 document.getElementById("response").innerHTML = error;
             });
+
+        document.getElementById("form-container").innerHTML = ` <h2>Employee</h2>
+        <h3 onclick="close_addtime()">X</h3>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name"  name="last_name" placeholder="e.g., Johnson" />
+        </div>
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="e.g., Ricky" />
+        </div>
+        <div class="form-group">
+            <label for="admin">Admin</label>
+            <select name="admin" id="admin" placeholder=" ">
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                </select>
+        </div>
+        <button onclick="addEmp()" id="schdule" ">Add To Employee</button> `
+
+        function show_schedule() {
+            document.getElementById("form-container").style.display = "block"
+        }
+
+        function close_addtime() {
+            document.getElementById("form-container").style.display = "none";
+        }
+
+        async function addEmp() {
+            const formData = {
+                last_name: document.getElementById("last_name").value,
+                first_name: document.getElementById("first_name").value,
+                admin: document.getElementById("admin").value,
+            };
+
+            try {
+                const response = await fetch(`/admin/employees/:${id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Schedule added successfully!");
+                    location.reload()
+                    close_addtime()
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+
+        }
+
+        document.getElementById("toptable_edit").innerHTML = ` <h2 id="employee_id"></h2>
+        <h3 onclick="close_edit()">X</h3>
+         <input type="hidden" id="edit_id" name="edit_id" />
+        <div class="form-group">
+            <label for="edit_last_name">Last Name</label>
+            <input type="text" id="edit_last_name"  name="edit_last_name" />
+        </div>
+        <div class="form-group">
+            <label for="edit_first_name">First Name</label>
+            <input type="text" id="edit_first_name" name="edit_first_name" />
+        </div>
+        <div class="form-group">
+            <label for="edit_admin">Admin</label>
+            <select name="edit_admin" id="edit_admin" placeholder=" ">
+                    <option value="false">False</option>
+                    <option value="true">True</option>
+                </select>
+        </div>
+        <button onclick="edit_sch()" class="form_button">Edit</button> 
+
+        <input type="hidden" id="del_id" name="id" />
+                <button onclick="del_sch()" class="form_button" id="iddel">Delete</button>`
+
+        async function edit_sch() {
+            const formData = {
+                id: document.getElementById("edit_id").value,
+                last_name: document.getElementById("edit_last_name").value,
+                first_name: document.getElementById("edit_first_name").value,
+                admin: document.getElementById("edit_admin").value,
+            };
+            console.log(formData)
+            try {
+                const response = await fetch(`/admin/employees/:${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Schedule added successfully!");
+                    location.reload()
+                    close_edit();
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+        }
+
+        async function del_sch() {
+            const formData = {
+                id: document.getElementById("del_id").value,
+            };
+            console.log(formData)
+            try {
+                const response = await fetch(`/admin/employees/:${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Schedule deleted successfully!");
+                    location.reload()
+                    close_edit();
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+        }
+
         function populateEdit(id, last_name, first_name, admin) {
-            document.getElementById("edit").style.display = "block";
+            document.getElementById("toptable_edit").style.display = "block";
             document.getElementById("employee_id").innerText = `Employee ${id}`;
-            document.getElementById("id").value = id;
+            document.getElementById("edit_id").value = id;
             document.getElementById("del_id").value = id;
-            document.getElementById("last_name").value = last_name;
-            document.getElementById("first_name").value = first_name;
+            document.getElementById("edit_last_name").value = last_name;
+            document.getElementById("edit_first_name").value = first_name;
             document.getElementById("admin").value = admin;
         }
         function close_edit() {
-            document.getElementById("edit").style.display = "none";
+            document.getElementById("toptable_edit").style.display = "none";
         }
 
 

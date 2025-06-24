@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule</title>
+    <link rel="stylesheet" href="/Admin_view/schdule.css">
+</head>
+
+<body>
+    <ul id="nav">
+        <li id="logo"><img src="/Admin_view/LSP-removebg-preview.png" alt="LSP Logo"></li>
+        <li class="routes">
+            <h1><a href="/admin/page">Employees</a></h1>
+        </li>
+        <li class="routes">
+            <h1>Schedule</h1>
+        </li>
+        <li class="routes">
+            <h1>Location</h1>
+        </li>
+        <li class="routes">
+            <h1>TimeSheet</h1>
+        </li>
+    </ul>
+
+    <div id="form-container">
+    </div>
+
+    <div id="toptable_edit">
+    </div>
+
+    <ul id="toptable">
+        <li>
+            <h2>Schedule</h2>
+        </li>
+        <li><button id="schdule" onclick="show_schedule()">Add Time</button></li>
+    </ul>
+
+    <table id="ScheduleTable">
+        <tr>
+            <th>Employee</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Edit</th>
+        </tr>
+    </table>
+
+    <p id="response"></p>
+
+    <script>
+        var id = <%=admin_id %>;
+
+        fetch(`http://localhost:8080/admin/schedule/:${id}`, {
+            method: 'GET'
+        }).then(async (response) => {
+            const data = await response.json();
+            if (!response.ok) {
+                document.getElementById("response").innerHTML = data.error || "An error occurred";
+            } else {
+                const table = document.getElementById("ScheduleTable")
+                for (i = 0; i < data.length; i++) {
+                    let schedule_id = data[i].id;
+                    let work_date = JSON.stringify(data[i].work_date).replaceAll('"', '');
+                    let last_name = JSON.stringify(data[i].last_name).replaceAll('"', '');
+                    let first_name = JSON.stringify(data[i].first_name).replaceAll('"', '');
+                    let location_name = JSON.stringify(data[i].location_name).replaceAll('"', '');
+                    let location_address = JSON.stringify(data[i].location_name).replaceAll('"', '');
+                    let start_time = JSON.stringify(data[i].start_time).replaceAll('"', '');
+                    let end_time = JSON.stringify(data[i].end_time).replaceAll('"', '');
+                    table.innerHTML += `
+                    <tr>
+                        <td>${first_name} ${last_name}</td>
+                        <td>${location_name}</td>
+                        <td>${work_date}</td>
+                        <td>${start_time}</td>
+                        <td>${end_time}</td>
+                        <td><a href="#toptable_edit"><button id="edit_button" onclick="populateEdit('${first_name}', '${last_name}', '${location_name}', '${work_date}', '${start_time}', '${end_time}',${schedule_id})">...</button></a></td>
+                     </tr>`
+                }
+            }
+        }).catch(error => {
+            console.error("Clock-In Error:", error);
+        });
+
+        document.getElementById("form-container").innerHTML = ` <h2>Schedule</h2>
+        <h3 onclick="close_addtime()">X</h3>
+        <div class="form-group">
+            <label for="employee">Employee ID</label>
+            <input type="text" id="id"  name="id" placeholder="e.g., 874653" />
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location_name" name="location_name" placeholder="e.g., Office 101" />
+        </div>
+        <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="work_date" name="work_date" />
+        </div>
+        <div class="form-group">
+            <label for="start">Start Time</label>
+            <input type="time" id="start_time" name="start_time"/>
+        </div>
+        <div class="form-group">
+            <label for="end">End Time</label>
+            <input type="time" id="end_time" name="end_time" />
+        </div>
+        <button onclick="addAppointment()" id="schdule" ">Add To Schedule</button> `
+
+        document.getElementById("toptable_edit").innerHTML = `<h2 id="employee_name"></h2>
+            <h3 onclick="close_edit()">X</h3>
+            <input type="hidden" id="edit_id" name="id" />
+            <input type="hidden" id="edit_last_name" name="last_name" />
+            <input type="hidden" id="edit_first_name" name="first_name" />
+            <input id="edit_location_name" class="name" name="location_name" type="text" placeholder="location">
+            <input id="edit_work_date" class="name" name="work_date" type="date">
+            <input type="time" id="edit_start_time" name="start_time">
+            <input type="time" id="edit_end_time" name="end_time">
+            <button onclick="edit_sch()" class="form_button">Edit</button>
+
+                <input type="hidden" id="del_id" name="id" />
+                <button onclick="del_sch()" class="form_button" id="iddel">Delete</button>`
+
+
+        async function addAppointment() {
+            const formData = {
+                id: document.getElementById("id").value,
+                location_name: document.getElementById("location_name").value,
+                work_date: document.getElementById("work_date").value,
+                start_time: document.getElementById("start_time").value,
+                end_time: document.getElementById("end_time").value,
+            };
+
+            try {
+                const response = await fetch(`/admin/schedule/${id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Schedule added successfully!");
+                    location.reload()
+                    close_addtime()
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+
+            // Clear form
+            document.getElementById("employee").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("start").value = "";
+            document.getElementById("end").value = "";
+        }
+
+        async function edit_sch() {
+            const formData = {
+                id: document.getElementById("edit_id").value,
+                location_name: document.getElementById("edit_location_name").value,
+                work_date: document.getElementById("edit_work_date").value,
+                start_time: document.getElementById("edit_start_time").value,
+                end_time: document.getElementById("edit_end_time").value,
+                last_name: document.getElementById("edit_last_name").value,
+                first_name: document.getElementById("edit_first_name").value,
+            };
+            console.log(formData)
+            try {
+                const response = await fetch(`/admin/schedule/:${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Schedule added successfully!");
+                    location.reload()
+                    close_edit();
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+        }
+
+        async function del_sch() {
+            const formData = {
+                id: document.getElementById("del_id").value,
+            };
+            console.log(formData)
+            try {
+                const response = await fetch(`/admin/schedule/:${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Schedule deleted successfully!");
+                    location.reload()
+                    close_edit();
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+        }
+
+        function show_schedule() {
+            document.getElementById("form-container").style.display = "block"
+        }
+
+        function populateEdit(first_name, last_name, location_name, work_date, start_time, end_time, schedule_id) {
+            const formattedDate = new Date(work_date).toISOString().split('T')[0];
+
+            document.getElementById("toptable_edit").style.display = "block";
+            document.getElementById("edit_id").value = schedule_id;
+            document.getElementById("edit_last_name").value = last_name;
+            document.getElementById("edit_first_name").value = first_name;
+            document.getElementById("employee_name").innerText = `${first_name} ${last_name}`;
+            document.getElementById("edit_location_name").value = location_name;
+            document.getElementById("edit_work_date").value = formattedDate;
+            document.getElementById("edit_start_time").value = start_time;
+            document.getElementById("edit_end_time").value = end_time;
+            document.getElementById("del_id").value = schedule_id;
+            console.log(schedule_id, first_name, last_name, location_name, work_date, start_time, end_time)
+            console.log(typeof schedule_id)
+        }
+
+        function close_addtime() {
+            document.getElementById("form-container").style.display = "none";
+        }
+
+        function close_edit() {
+            document.getElementById("toptable_edit").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

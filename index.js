@@ -20,6 +20,7 @@ import timesheet from "./routes/admin/timeshee.js";
 import clock_in from "./routes/public/clock-in.js";
 import clock_out from "./routes/public/clock-out.js";
 import public_timesheet from "./routes/public/public_timesheet.js";
+import public_getloc from "./routes/public/public_getloc.js";
 import passport from "passport";
 import flash from "express-flash";
 import session from "express-session";
@@ -73,6 +74,7 @@ app.use("/admin/timesheet", timesheet);
 app.use("/clock-in", clock_in);
 app.use("/clock-out", clock_out);
 app.use("/timesheet", public_timesheet);
+app.use("/location", public_getloc);
 
 //View Routes
 app.get("/", (req, res) => {
@@ -88,7 +90,14 @@ app.get("/admin/page", checkAuthenticated, async (req, res) => {
   });
 });
 app.get("/admin/schedule", async (req, res) => {
-  res.sendFile(path.join(__dirname, "Admin_view", "schedule.html"));
+  if (!req.session.isLoggedIn) {
+    return res.redirect("/admin/login");
+  }
+
+  res.render("schedule.ejs", {
+    admin_id: req.session.admin_id,
+  });
+  //res.sendFile(path.join(__dirname, "Admin_view", "schedule.html"));
 });
 
 //Login

@@ -160,6 +160,14 @@ WHERE
 ORDER BY
     clock_in DESC;
 
+--@Block
+SELECT
+    location_address
+FROM
+    Locations
+WHERE
+    location_name = 'test';
+
 
 /*Update table Section*/
 --@BLOCK

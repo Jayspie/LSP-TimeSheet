@@ -110,8 +110,33 @@
 
 
 
+        async function getlocationurl(loc_name, user_id) {
+            const params = new URLSearchParams({
+                location_name: loc_name
+            });
 
-        function TimeSheet() {
+            const response = await fetch(`http://localhost:8080/location/${user_id}?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                document.getElementById("response").innerHTML = data.error || "An error occurred";
+                return null;
+            }
+
+            if (data.length < 1) {
+                document.getElementById("response").innerHTML = "Can't find Location";
+                return null;
+            }
+            return `https://www.google.com/maps/place/${data.replaceAll(" ", "+")}`;
+        }
+
+        async function TimeSheet() {
             var input = document.getElementById("clockTextarea")
             fetch(`http://localhost:8080/timesheet/:${input.value}`, {
                 method: 'GET'
@@ -172,6 +197,7 @@
                             let last_name = JSON.stringify(data[i].last_name).replaceAll('"', '');
                             let first_name = JSON.stringify(data[i].first_name).replaceAll('"', '');
                             let location_name = JSON.stringify(data[i].location_name).replaceAll('"', '');
+                            const googleMapUrl = await getlocationurl(location_name, input.value);
                             let clock_in = JSON.stringify(data[i].clock_in).replaceAll('"', '');
                             let clock_out = JSON.stringify(data[i].clock_out).replaceAll('"', '');
                             let total_hours = JSON.stringify(data[i].total_hours).replaceAll('"', '');
@@ -180,7 +206,7 @@
                 <td>${id}</td>
                 <td>${last_name}</td>
                 <td>${first_name}</td>
-                <td>${location_name}</td>
+                <td><a target="_blank" href=${googleMapUrl}>${location_name}</a></td>
                 <td>${clock_in}</td>
                 <td>${clock_out}</td>
                 <td>${total_hours}</td>
