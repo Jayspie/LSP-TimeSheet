@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<<<<<<< HEAD
     <ul id="nav">
         <li id="logo"><img src="/Admin_view/LSP-removebg-preview.png" alt="LSP Logo"></li>
         <li class="routes">
@@ -23,21 +24,61 @@
         <li class="routes">
             <h1>TimeSheet</h1>
         </li>
+=======
+    <ul id="nav"></ul>
+    <li id="logo"><img src="/Admin_view/LSP-removebg-preview.png" alt="LSP Logo"></li>
+    <li class="routes">
+        <h1><a href="/admin/page">Employees</a></h1>
+    </li>
+    <li class="routes">
+        <h1>Schedule</h1>
+    </li>
+    <li class="routes">
+        <h1>Location</h1>
+    </li>
+    <li class="routes">
+        <h1>TimeSheet</h1>
+    </li>
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
     </ul>
 
     <div id="form-container">
     </div>
+<<<<<<< HEAD
 
     <div id="toptable_edit">
     </div>
 
+=======
+    <div id="toptable_edit">
+        <!--<h2 id="employee_name"></h2>
+        <h3 onclick=" close_edit()">X</h3>
+        <form action="/admin/schedule/:<%=admin_id %>?_method=PUT" method="POST">
+            <input type="hidden" id="edit_id" name="id" />
+            <input type="hidden" id="edit_last_name" name="last_name" />
+            <input type="hidden" id="edit_first_name" name="first_name" />
+            <input id="location_name" class="name" name="location_name" type="text" placeholder="location">
+            <input id="work_date" class="name" name="work_date" type="date">
+            <input type="time" id="start_time" name="start_time">
+            <input type="time" id="end_time" name="end_time">
+            <button type="submit" class="form_button">Edit</button>
+        </form>
+        <form action="/admin/schedule/:<%=admin_id %>?_method=DELETE" method="POST">
+            <input type="hidden" id="del_id" name="id" />
+            <button type="submit" class="form_button" id="iddel">Delete</button>
+        </form-->
+    </div>
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
     <ul id="toptable">
         <li>
             <h2>Schedule</h2>
         </li>
         <li><button id="schdule" onclick="show_schedule()">Add Time</button></li>
     </ul>
+<<<<<<< HEAD
 
+=======
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
     <table id="ScheduleTable">
         <tr>
             <th>Employee</th>
@@ -48,12 +89,18 @@
             <th>Edit</th>
         </tr>
     </table>
+<<<<<<< HEAD
 
     <p id="response"></p>
 
     <script>
         var id = <%=admin_id %>;
 
+=======
+    <p id="response"></p>
+    <script>
+        var id = <%=admin_id %>;
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
         fetch(`http://localhost:8080/admin/schedule/:${id}`, {
             method: 'GET'
         }).then(async (response) => {
@@ -78,14 +125,21 @@
                         <td>${work_date}</td>
                         <td>${start_time}</td>
                         <td>${end_time}</td>
+<<<<<<< HEAD
                         <td><a href="#toptable_edit"><button id="edit_button" onclick="populateEdit('${first_name}', '${last_name}', '${location_name}', '${work_date}', '${start_time}', '${end_time}',${schedule_id})">...</button></a></td>
+=======
+                        <td><button id="edit_button" onclick="populateEdit('${first_name}', '${last_name}', '${location_name}', '${work_date}', '${start_time}', '${end_time}',${schedule_id})">...</button></td>
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
                      </tr>`
                 }
             }
         }).catch(error => {
             console.error("Clock-In Error:", error);
         });
+<<<<<<< HEAD
 
+=======
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
         document.getElementById("form-container").innerHTML = ` <h2>Schedule</h2>
         <h3 onclick="close_addtime()">X</h3>
         <div class="form-group">
@@ -146,8 +200,11 @@
                 const data = await response.json();
                 if (response.ok) {
                     alert("Schedule added successfully!");
+<<<<<<< HEAD
                     location.reload()
                     close_addtime()
+=======
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
                 } else {
                     alert(data.error || "Something went wrong.");
                 }
@@ -188,8 +245,11 @@
                 const data = await response.json();
                 if (response.ok) {
                     alert("Schedule added successfully!");
+<<<<<<< HEAD
                     location.reload()
                     close_edit();
+=======
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
                 } else {
                     alert(data.error || "Something went wrong.");
                 }
@@ -216,9 +276,13 @@
 
                 const data = await response.json();
                 if (response.ok) {
+<<<<<<< HEAD
                     alert("Schedule deleted successfully!");
                     location.reload()
                     close_edit();
+=======
+                    alert("Schedule added successfully!");
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
                 } else {
                     alert(data.error || "Something went wrong.");
                 }
@@ -228,11 +292,17 @@
             }
 
         }
+<<<<<<< HEAD
 
         function show_schedule() {
             document.getElementById("form-container").style.display = "block"
         }
 
+=======
+        function show_schedule() {
+            document.getElementById("form-container").style.display = "block"
+        }
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
         function populateEdit(first_name, last_name, location_name, work_date, start_time, end_time, schedule_id) {
             const formattedDate = new Date(work_date).toISOString().split('T')[0];
 
@@ -249,11 +319,17 @@
             console.log(schedule_id, first_name, last_name, location_name, work_date, start_time, end_time)
             console.log(typeof schedule_id)
         }
+<<<<<<< HEAD
 
         function close_addtime() {
             document.getElementById("form-container").style.display = "none";
         }
 
+=======
+        function close_addtime() {
+            document.getElementById("form-container").style.display = "none";
+        }
+>>>>>>> db5be1ae78455e0bd9faf0b3b078d299fb75b4c3
         function close_edit() {
             document.getElementById("toptable_edit").style.display = "none";
         }
