@@ -30,7 +30,7 @@ clock_out.put("/:id", async (req, res) => {
   WHERE employees_id = ${emp_id[0]?.id}
   ORDER BY clock_in DESC
   LIMIT 1`;
-
+  console.log(typeof req.body.timestamp);
   if (all_emp.some((emp) => emp.id === emp_id[0]?.id)) {
     try {
       const result = await sql`

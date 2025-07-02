@@ -103,9 +103,7 @@ FROM
 SELECT
     *
 FROM
-    TIMESHEET
-WHERE
-    employees_ID = 2;
+    TIMESHEET;
 
 --@BLOCK
 SELECT
@@ -182,10 +180,10 @@ WHERE
 UPDATE
     TIMESHEET
 SET
-    clock_out = '2025-03-08 23:10:25-07'
+    clock_out = '2025-06-30T15:26:59'
 WHERE
-    employees_ID = 1
-    AND clock_in = '2025-03-08 19:10:25-07';
+    employees_ID = 6379
+    AND clock_in = '2025-06-30 15:07:49-05';
 
 --@BLOCK
 UPDATE
@@ -198,8 +196,8 @@ WHERE
 
 /*Delete table Section*/
 --@BLOCK
-DELETE FROM ADMIN
-WHERE admin_id = 1;
+DELETE FROM TIMESHEET
+WHERE employees_id = 2310;
 
 --@BLOCK
 DROP TABLE ADMIN;
@@ -242,9 +240,15 @@ WHERE
     table_name = 'schedule';
 
 --@block
-ALTER TABLE schedule
-    ALTER COLUMN start_time TYPE time
-    USING start_time::time,
-    ALTER COLUMN end_time TYPE time
-    USING end_time::time;
+ALTER TABLE TIMESHEET
+    ALTER COLUMN total_hours TYPE text;
+
+--@block
+SELECT
+    COLUMN_NAME,
+    DATA_TYPE
+FROM
+    INFORMATION_SCHEMA.COLUMNS
+WHERE
+    TABLE_NAME = 'timesheet';
 

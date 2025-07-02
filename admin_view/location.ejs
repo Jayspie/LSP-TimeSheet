@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Location</title>
+    <link rel="stylesheet" href="/Admin_view/location.css">
+</head>
+
+<body>
+    <ul id="nav">
+        <li id="logo"><img src="/Admin_view/LSP-removebg-preview.png" alt="LSP Logo"></li>
+        <li class="routes">
+            <h1><a href="/admin/page">Employees</a></h1>
+        </li>
+        <li class="routes">
+            <h1><a href="/admin/schedule">Schedule</a></h1>
+        </li>
+        <li class="routes">
+            <h1>Location</h1>
+        </li>
+        <li class="routes">
+            <h1>TimeSheet</h1>
+        </li>
+    </ul>
+
+    <div id="form-container">
+    </div>
+
+
+    <div id="toptable_edit">
+    </div>
+
+    <ul id="toptable">
+        <li>
+            <h2>Location</h2>
+        </li>
+        <li><button id="schdule" onclick="show_location()">Add Location</button></li>
+    </ul>
+    <table id="locationTable">
+        <tr>
+            <th>Location Name</th>
+            <th>Location Address</th>
+            <th>latitude 1</th>
+            <th>longitude 1</th>
+            <th>latitude 2</th>
+            <th>longitude 2</th>
+            <th>Edit</th>
+        </tr>
+    </table>
+
+
+    <p id="response"></p>
+    <script>
+        var id = <%=admin_id %>;
+        fetch(`/admin/location/:${id}`, {
+            method: 'GET'
+        }).then(async (response) => {
+            const data = await response.json();
+            if (!response.ok) {
+                document.getElementById("response").innerHTML = data.error || "An error occurred";
+            } else {
+                const table = document.getElementById("locationTable")
+                for (i = 0; i < data.length; i++) {
+                    let location_id = data[i].id;
+                    let location_name = JSON.stringify(data[i].location_name).replaceAll('"', '');
+                    let location_address = JSON.stringify(data[i].location_address).replaceAll('"', '');
+                    let lat_1 = JSON.stringify(data[i].lat_1).replaceAll('"', '');
+                    let long_1 = JSON.stringify(data[i].long_1).replaceAll('"', '');
+                    let lat_2 = JSON.stringify(data[i].lat_2).replaceAll('"', '');
+                    let long_2 = JSON.stringify(data[i].long_2).replaceAll('"', '');
+                    table.innerHTML += `
+                    <tr>
+                        <td>${location_name}</td>
+                        <td>${location_address}</td>
+                        <td>${lat_1}</td>
+                        <td>${long_1}</td>
+                        <td>${lat_2}</td>
+                        <td>${long_2}</td>
+
+                        <td><a href="#toptable_edit"><button id="edit_button" onclick="populateEdit('${location_id}', '${location_name}', '${location_address}')">...</button></a></td>
+
+                     </tr>`
+                }
+            }
+        }).catch(error => {
+            console.error("Location Error:", error);
+        });
+
+
+
+        document.getElementById("form-container").innerHTML = ` <h2>Location</h2>
+        <h3 onclick="close_location()">X</h3>
+        <div class="form-group">
+            <label for="location_name">Location Name</label>
+            <input type="text" id="location_name" name="location_name" placeholder="e.g., Office 101" />
+        </div>
+         <div class="form-group">
+            <label for="location_address">Location Address</label>
+            <input type="text" id="location_address" name="location_address" placeholder="e.g., 10180970 Lenny Cove" />
+        </div>
+        <button onclick="addAppointment()" id="schdule" ">Add Location</button> `
+
+        document.getElementById("toptable_edit").innerHTML = `<h2 id="employee_name">Edit Location</h2>
+            <h3 onclick="close_edit()">X</h3>
+            <input type="hidden" id="edit_id" name="id" />
+            <input id="edit_location_name" class="name" name="location_name" type="text" placeholder="location">
+            <input id="edit_location_address" class="name" name="location_address" type="text" placeholder="location">
+            <button onclick="edit_sch()" class="form_button">Edit</button>
+
+                <input type="hidden" id="del_id" name="id" />
+                <button onclick="del_sch()" class="form_button" id="iddel">Delete</button>`
+
+
+        async function addAppointment() {
+            const formData = {
+                location_name: document.getElementById("location_name").value,
+                location_address: document.getElementById("location_address").value,
+            };
+
+            try {
+                const response = await fetch(`/admin/location/:${id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Location added successfully!");
+
+                    location.reload()
+                    close_addtime()
+
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+
+            // Clear form
+            document.getElementById("location_name").value = "";
+            document.getElementById("location_address").value = "";
+        }
+
+        async function edit_sch() {
+            const formData = {
+                id: document.getElementById("edit_id").value,
+                location_name: document.getElementById("edit_location_name").value,
+                location_address: document.getElementById("edit_location_address").value,
+            };
+            console.log(formData)
+            try {
+                const response = await fetch(`/admin/location/:${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert("Location updated successfully!");
+                    location.reload()
+                    close_edit();
+
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+        }
+
+        async function del_sch() {
+            const formData = {
+                location_name: document.getElementById("edit_location_name").value,
+            };
+            console.log(formData)
+            try {
+                const response = await fetch(`/admin/location/:${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+
+                    alert("Location deleted successfully!");
+                    location.reload()
+                    close_edit();
+
+                } else {
+                    alert(data.error || "Something went wrong.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error.");
+            }
+
+        }
+
+
+        function show_location() {
+            document.getElementById("form-container").style.display = "block"
+        }
+
+        function populateEdit(id, location_name, location_address) {
+            document.getElementById("toptable_edit").style.display = "block";
+            document.getElementById("edit_id").value = id;
+            document.getElementById("edit_location_name").value = location_name;
+            document.getElementById("edit_location_address").value = location_address;
+        }
+
+
+        function close_location() {
+            document.getElementById("form-container").style.display = "none";
+        }
+
+
+        function close_edit() {
+            document.getElementById("toptable_edit").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>

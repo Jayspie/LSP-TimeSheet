@@ -57,11 +57,48 @@
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
 
-                    fetch(`http://localhost:8080/clock-in/:${input.value}`, {
+                    const utctime = new Date();
+                    const utc_local = new Date(utctime.toLocaleDateString("en-US"));
+                    const currentDate = new Date();
+                    const timestamp = currentDate.toLocaleTimeString();
+                    var pit = currentDate
+                        .toTimeString()
+                        .replace(" GMT-0500 (Central Daylight Time)", "")
+                        .split(":");
+                    if (pit[0].length < 2) {
+                        pit[0] = `0${pit[0]}`;
+                    }
+                    var t = pit.join().replaceAll(",", "");
+
+                    console.log(t);
+                    var wee;
+                    if (
+                        currentDate.toTimeString().replace(" GMT-0500 (Central Daylight Time)", "")
+                            .length < 8
+                    ) {
+                        wee =
+                            utc_local.toISOString().split("T")[0] +
+                            `T0${currentDate
+                                .toTimeString()
+                                .replace(" GMT-0500 (Central Daylight Time)", "")}`;
+                    } else {
+                        wee =
+                            utc_local.toISOString().split("T")[0] +
+                            `T${currentDate
+                                .toTimeString()
+                                .replace(" GMT-0500 (Central Daylight Time)", "")}`;
+                    }
+
+                    console.log(wee);
+                    var db = utc_local.toISOString().split("T")[0] + "T00:00:00.000Z";
+                    fetch(`clock-in/:${input.value}`, {
                         method: 'POST',
                         body: JSON.stringify({
                             lat: latitude,
                             lng: longitude,
+                            time: t,
+                            timestamp: wee,
+                            db_time: db
                         }),
                         headers: {
                             'Content-type': 'application/json; charset=UTF-8',
@@ -86,10 +123,45 @@
 
         function Clock_Out() {
             var input = document.getElementById("clockTextarea")
+            const utctime = new Date();
+            const utc_local = new Date(utctime.toLocaleDateString("en-US"));
+            const currentDate = new Date();
+            var pit = currentDate
+                .toTimeString()
+                .replace(" GMT-0500 (Central Daylight Time)", "")
+                .split(":");
+            if (pit[0].length < 2) {
+                pit[0] = `0${pit[0]}`;
+            }
+            var t = pit.join().replaceAll(",", "");
+
+            console.log(t);
+            var wee;
+            if (
+                currentDate.toTimeString().replace(" GMT-0500 (Central Daylight Time)", "")
+                    .length < 8
+            ) {
+                wee =
+                    utc_local.toISOString().split("T")[0] +
+                    `T0${currentDate
+                        .toTimeString()
+                        .replace(" GMT-0500 (Central Daylight Time)", "")}`;
+            } else {
+                wee =
+                    utc_local.toISOString().split("T")[0] +
+                    `T${currentDate
+                        .toTimeString()
+                        .replace(" GMT-0500 (Central Daylight Time)", "")}`;
+            }
+
+            console.log(wee);
 
 
-            fetch(`http://localhost:8080/clock-out/:${input.value}`, {
+            fetch(`clock-out/:${input.value}`, {
                 method: 'PUT',
+                body: JSON.stringify({
+                    timestamp: wee
+                }),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 }
@@ -115,7 +187,7 @@
                 location_name: loc_name
             });
 
-            const response = await fetch(`http://localhost:8080/location/${user_id}?${params.toString()}`, {
+            const response = await fetch(`location/${user_id}?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
@@ -138,7 +210,7 @@
 
         async function TimeSheet() {
             var input = document.getElementById("clockTextarea")
-            fetch(`http://localhost:8080/timesheet/:${input.value}`, {
+            fetch(`timesheet/:${input.value}`, {
                 method: 'GET'
             }).then(async (response) => {
                 const data = await response.json();
@@ -201,14 +273,16 @@
                             let clock_in = JSON.stringify(data[i].clock_in).replaceAll('"', '');
                             let clock_out = JSON.stringify(data[i].clock_out).replaceAll('"', '');
                             let total_hours = JSON.stringify(data[i].total_hours).replaceAll('"', '');
+                            var newdatclockin = new Date(clock_in);
+                            var newdatclockout = new Date(clock_out)
                             table.innerHTML += `
         <tr>
                 <td>${id}</td>
                 <td>${last_name}</td>
                 <td>${first_name}</td>
                 <td><a target="_blank" href=${googleMapUrl}>${location_name}</a></td>
-                <td>${clock_in}</td>
-                <td>${clock_out}</td>
+                <td>${newdatclockin.toLocaleString()}</td>
+                <td>${newdatclockout.toLocaleString()}</td>
                 <td>${total_hours}</td>
         </tr>`}
                     }

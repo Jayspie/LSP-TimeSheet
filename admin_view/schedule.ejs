@@ -18,7 +18,7 @@
             <h1>Schedule</h1>
         </li>
         <li class="routes">
-            <h1>Location</h1>
+            <h1><a href="/admin/location">Location</a></h1>
         </li>
         <li class="routes">
             <h1>TimeSheet</h1>
@@ -53,7 +53,7 @@
     <p id="response"></p>
     <script>
         var id = <%=admin_id %>;
-        fetch(`http://localhost:8080/admin/schedule/:${id}`, {
+        fetch(`/admin/schedule/:${id}`, {
             method: 'GET'
         }).then(async (response) => {
             const data = await response.json();
@@ -239,11 +239,6 @@
 
         }
 
-
-        function show_schedule() {
-            document.getElementById("form-container").style.display = "block"
-        }
-
         function show_schedule() {
             document.getElementById("form-container").style.display = "block"
         }
@@ -264,12 +259,6 @@
             console.log(schedule_id, first_name, last_name, location_name, work_date, start_time, end_time)
             console.log(typeof schedule_id)
         }
-
-
-        function close_addtime() {
-            document.getElementById("form-container").style.display = "none";
-        }
-
 
         function close_addtime() {
             document.getElementById("form-container").style.display = "none";
