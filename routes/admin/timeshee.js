@@ -9,7 +9,8 @@ timesheet.get("/:admin_id", async (req, res) => {
   )}`;
   if (admin[0]?.admin == true) {
     try {
-      const schedule = await sql` SELECT * FROM TIMESHEET;`;
+      const schedule =
+        await sql` SELECT * FROM TIMESHEET ORDER BY clock_in DESC;`;
       res.status(200).json(schedule);
     } catch (error) {
       console.error("[server] Error fetching employees:", error);

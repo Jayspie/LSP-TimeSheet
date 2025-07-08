@@ -30,14 +30,14 @@ clock_out.put("/:id", async (req, res) => {
   WHERE employees_id = ${emp_id[0]?.id}
   ORDER BY clock_in DESC
   LIMIT 1`;
-  console.log(typeof req.body.timestamp);
+  console.log(emp_time);
   if (all_emp.some((emp) => emp.id === emp_id[0]?.id)) {
     try {
       const result = await sql`
     UPDATE
       TIMESHEET
   SET
-      clock_out = ${clock_out}
+      clock_out = ${clock_out || req.body.timestamp}
   WHERE
       employees_ID = ${emp_id[0]?.id}
       AND clock_in = ${emp_time[0].clock_in}

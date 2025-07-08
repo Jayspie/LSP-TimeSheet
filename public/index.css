@@ -78,6 +78,32 @@ img {
   margin-top: 2rem;
 }
 
+#excel-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+#excel-table th,
+#excel-table td {
+  border: 1px solid #dee2e6;
+  padding: 10px 15px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#excel-table th {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  font-weight: bold;
+}
+
+#excel-table tr:nth-child(even) {
+  background-color: #f1f3f5;
+  width: 100%;
+}
+
 /* Responsive adjustments */
 
 /* For screens smaller than 768px (tablets and smaller) */
@@ -98,6 +124,18 @@ img {
   #clockTextarea {
     width: 180px;
   }
+  #time h2 {
+    margin-left: 36%;
+  }
+  .table-container {
+    margin-left: 21%;
+    width: 59%;
+    overflow-x: auto;
+  }
+
+  #excel-table {
+    max-width: 800px; /* prevents table from collapsing too much */
+  }
 }
 
 /* For screens smaller than 600px (smartphones) */
@@ -117,6 +155,34 @@ img {
   }
   #clockTextarea {
     width: 150px;
+  }
+}
+@media (max-width: 425px) {
+  img {
+    width: 120px;
+  }
+
+  .clock span {
+    font-size: 2.5rem;
+  }
+
+  .functions {
+    font-size: 0.9rem;
+  }
+  #clockTextarea {
+    width: 120px;
+  }
+  #time h2 {
+    margin-left: 36%;
+  }
+  .table-container {
+    margin-left: 31%;
+    width: 37%;
+    overflow-x: auto;
+  }
+
+  #excel-table {
+    max-width: 550px; /* prevents table from collapsing too much */
   }
 }
 

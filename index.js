@@ -112,6 +112,17 @@ app.get("/admin/location", async (req, res) => {
   //res.sendFile(path.join(__dirname, "Admin_view", "schedule.html"));
 });
 
+app.get("/admin/timesheet", async (req, res) => {
+  if (!req.session.isLoggedIn) {
+    return res.redirect("/admin/login");
+  }
+
+  res.render("time.ejs", {
+    admin_id: req.session.admin_id,
+  });
+  //res.sendFile(path.join(__dirname, "Admin_view", "schedule.html"));
+});
+
 //Login
 app.get("/admin/login", checkNotAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, "Admin_view", "login.html"));

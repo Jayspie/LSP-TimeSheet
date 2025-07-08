@@ -1,0 +1,154 @@
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+#nav {
+  list-style: none;
+  margin-bottom: -3%;
+}
+li {
+  width: 10%;
+  display: inline-block;
+  vertical-align: top;
+}
+#logo {
+  margin-right: 20%;
+}
+#logo img {
+  width: 80%;
+}
+.routes {
+  margin-right: 6%;
+}
+#contaer {
+  position: relative;
+}
+
+#form-container h2 {
+  color: #2c3e50;
+  margin-left: -0.5%;
+}
+#form-container h3 {
+  margin-top: -3%;
+  position: absolute;
+  margin-left: 92%;
+}
+
+#form-container {
+  background: #fff;
+  padding: 20px;
+  margin-top: 5%;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  top: 10%;
+  left: 37%;
+  display: none;
+}
+
+#form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 1%;
+}
+
+#schdule {
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #d1e7dd;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+#edit_button {
+  font-family: "ariel";
+  background-color: transparent;
+  border: none;
+  font-size: 200%;
+  font-weight: bold;
+}
+#toptable {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 -20px;
+  list-style: none;
+}
+
+#toptable li {
+  display: inline;
+  margin: 0;
+}
+#toptable li,
+h2 {
+  margin-left: -3%;
+}
+
+#toptable_edit {
+  background: #fff;
+  padding: 20px;
+  margin-top: 5%;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  top: 10%;
+  left: 37%;
+  display: none;
+}
+#toptable_edit h2 {
+  color: #2c3e50;
+  margin-left: -0.5%;
+}
+#toptable_edit h3 {
+  margin-top: -3%;
+  position: absolute;
+  margin-left: 92%;
+}
+#toptable_edit button {
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 2%;
+  width: 10%;
+}

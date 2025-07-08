@@ -6,7 +6,8 @@ SET total_hours = CONCAT(
   EXTRACT(HOUR FROM clock_out - clock_in), 'h ',
   EXTRACT(MINUTE FROM clock_out - clock_in), 'm'
 )
-WHERE total_hours IS NULL;
+WHERE total_hours IS NULL
+AND clock_out IS NOT NULL;
 `;
   return timesheet;
 }

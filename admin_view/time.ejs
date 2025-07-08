@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Location</title>
-    <link rel="stylesheet" href="/Admin_view/location.css">
+    <title>Timesheet</title>
+    <link rel="stylesheet" href="/Admin_view/time.css">
 </head>
 
 <body>
@@ -18,35 +18,27 @@
             <h1><a href="/admin/schedule">Schedule</a></h1>
         </li>
         <li class="routes">
-            <h1>Location</h1>
+            <h1><a href="/admin/location">Location</a></h1>
         </li>
         <li class="routes">
-            <h1><a href="/admin/timesheet">TimeSheet</a></h1>
+            <h1>TimeSheet</h1>
         </li>
     </ul>
-
-    <div id="form-container">
-    </div>
-
-
-    <div id="toptable_edit">
-    </div>
 
     <ul id="toptable">
         <li>
-            <h2>Location</h2>
+            <h2>TimeSheet</h2>
         </li>
-        <li><button id="schdule" onclick="show_location()">Add Location</button></li>
     </ul>
     <table id="locationTable">
         <tr>
+            <th>Employee Id</th>
+            <th>Last Name</th>
+            <th>First Name</th>
             <th>Location Name</th>
-            <th>Location Address</th>
-            <th>latitude 1</th>
-            <th>longitude 1</th>
-            <th>latitude 2</th>
-            <th>longitude 2</th>
-            <th>Edit</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Total Hours</th>
         </tr>
     </table>
 
@@ -54,7 +46,7 @@
     <p id="response"></p>
     <script>
         var id = <%=admin_id %>;
-        fetch(`/admin/location/:${id}`, {
+        fetch(`/admin/timesheet/:${id}`, {
             method: 'GET'
         }).then(async (response) => {
             const data = await response.json();
@@ -63,29 +55,30 @@
             } else {
                 const table = document.getElementById("locationTable")
                 for (i = 0; i < data.length; i++) {
-                    let location_id = data[i].id;
+                    let id = JSON.stringify(data[i].employees_id).replaceAll('"', '');
+                    let last_name = JSON.stringify(data[i].last_name).replaceAll('"', '');
+                    let first_name = JSON.stringify(data[i].first_name).replaceAll('"', '');
                     let location_name = JSON.stringify(data[i].location_name).replaceAll('"', '');
-                    let location_address = JSON.stringify(data[i].location_address).replaceAll('"', '');
-                    let lat_1 = JSON.stringify(data[i].lat_1).replaceAll('"', '');
-                    let long_1 = JSON.stringify(data[i].long_1).replaceAll('"', '');
-                    let lat_2 = JSON.stringify(data[i].lat_2).replaceAll('"', '');
-                    let long_2 = JSON.stringify(data[i].long_2).replaceAll('"', '');
+                    let clock_in = JSON.stringify(data[i].clock_in).replaceAll('"', '');
+                    let clock_out = JSON.stringify(data[i].clock_out).replaceAll('"', '');
+                    let total_hours = JSON.stringify(data[i].total_hours).replaceAll('"', '');
+                    var newdatclockin = new Date(clock_in);
+                    var newdatclockout = new Date(clock_out)
                     table.innerHTML += `
-                    <tr>
-                        <td>${location_name}</td>
-                        <td>${location_address}</td>
-                        <td>${lat_1}</td>
-                        <td>${long_1}</td>
-                        <td>${lat_2}</td>
-                        <td>${long_2}</td>
+                        <tr>
+                            <td>${id}</td>
+                            <td>${last_name}</td>
+                            <td>${first_name}</td>
+                            <td>${location_name}</td>
+                            <td>${newdatclockin.toLocaleString()}</td>
+                            <td>${newdatclockout.toLocaleString()}</td>
+                            <td>${total_hours}</td>
 
-                        <td><a href="#toptable_edit"><button id="edit_button" onclick="populateEdit('${location_id}', '${location_name}', '${location_address}')">...</button></a></td>
-
-                     </tr>`
+                        </tr>`
                 }
             }
         }).catch(error => {
-            console.error("Location Error:", error);
+            console.error("TimeSheet Error:", error);
         });
 
 

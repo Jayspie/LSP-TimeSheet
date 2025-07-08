@@ -8,6 +8,8 @@ const between = (x, min, max) => {
   return x >= min && x <= max;
 };
 
+const testloclat = "29.85981";
+const testloclng = "-95.53534";
 var late;
 const utctime = new Date();
 const utc_local = new Date(utctime.toLocaleDateString("en-US"));

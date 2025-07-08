@@ -34,7 +34,7 @@ schedule.post("/:admin_id", async (req, res) => {
       const emp_name = await sql`SELECT * FROM employees WHERE id = ${id}`;
       const loc_add =
         await sql`SELECT * FROM locations WHERE location_name = ${location_name}`;
-
+      console.log(location_name);
       const result = await sql`insert into schedule (
               work_date ,
               last_name ,

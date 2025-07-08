@@ -252,3 +252,7 @@ FROM
 WHERE
     TABLE_NAME = 'timesheet';
 
+--@block
+SELECT
+    pg_size_pretty(pg_database_size('lsptimesheet'));
+

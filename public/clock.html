@@ -223,46 +223,21 @@
                     }
                     else {
                         document.getElementById("time").innerHTML = `
-<style>
-
-        #excel-table {
-            width: 100%;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
-        }
-
-        #excel-table th,
-        #excel-table td {
-            border: 1px solid #dee2e6;
-            padding: 10px 15px;
-            text-align: left;
-            white-space: nowrap;
-        }
-
-        #excel-table th {
-            background-color: #d1e7dd;
-            color: #0f5132;
-            font-weight: bold;
-        }
-
-        #excel-table tr:nth-child(even) {
-            background-color: #f1f3f5;
-        }
-    </style>
 
     <h2>${JSON.stringify(data[0].first_name).replaceAll('"', "")} ${JSON.stringify(data[0].last_name).replaceAll('"', "")} Timesheet</h2>
-    <table id='excel-table'>
-            <tr>
-                <th>employee_id</th>
-                <th>last_name</th>
-                <th>first_name</th>
-                <th>location_name</th>
-                <th>clock_in</th>
-                <th>clock_out</th>
-                <th>total_hours</th>
-            </tr>
-    </table>`/*JSON.stringify(data)*/
+ <div class="table-container">
+      <table id='excel-table'>
+          <tr>
+              <th>Employee Id</th>
+              <th>Last Name</th>
+              <th>First Name</th>
+              <th>Location Name</th>
+              <th>Clock In</th>
+              <th>Clock Out</th>
+              <th>Total Hours</th>
+          </tr>
+      </table>
+    </div>`/*JSON.stringify(data)*/
                         const table = document.getElementById("excel-table")
                         for (i = 0; i < data.length; i++) {
                             let id = JSON.stringify(data[i].employees_id).replaceAll('"', '');
